@@ -1,10 +1,8 @@
-# Импортируем необходимые библиотеки
-import pandas as pd
-import sqlalchemy
+# РРјРїРѕСЂС‚РёСЂСѓРµРј РЅРµРѕР±С…РѕРґРёРјС‹Рµ Р±РёР±Р»РёРѕС‚РµРєРё
 import mysql.connector
 import csv
 
-# Создание соединения с нашей базой данных
+# РЎРѕР·РґР°РЅРёРµ СЃРѕРµРґРёРЅРµРЅРёСЏ СЃ РЅР°С€РµР№ Р±Р°Р·РѕР№ РґР°РЅРЅС‹С…
 config = {
     'user': 'root',
     'password': '',
@@ -13,35 +11,34 @@ config = {
 }
 conn = mysql.connector.connect(**config)
 
-#Делаем запросы и получаем результаты
+# Р”РµР»Р°РµРј Р·Р°РїСЂРѕСЃС‹ Рё РїРѕР»СѓС‡Р°РµРј СЂРµР·СѓР»СЊС‚Р°С‚С‹
 cursor = conn.cursor()
 
-#Создаем таблицу в бд с помощью execute
-#Таблица с двумя столбцами user_id и started_at 
+# РЎРѕР·РґР°РµРј С‚Р°Р±Р»РёС†Сѓ РІ Р±Рґ СЃ РїРѕРјРѕС‰СЊСЋ execute
+# РўР°Р±Р»РёС†Р° СЃ РґРІСѓРјСЏ СЃС‚РѕР»Р±С†Р°РјРё user_id Рё started_at
 cursor.execute("CREATE TABLE USERS ( \
                 user_id int (10) AUTO_INCREMENT, \
                 started_at TIMESTAMP NOT NULL, \
                 PRIMARY KEY (user_id)); ")
 
-#Импортируем таблицы в бд
+# РРјРїРѕСЂС‚РёСЂСѓРµРј С‚Р°Р±Р»РёС†С‹ РІ Р±Рґ
 
 with open('C:/Users/23/analyst_test.csv') as csvfile:
-    reader = csv.DictReader(csvfile, delimiter = ',')
+    reader = csv.DictReader(csvfile, delimiter=',')
     for row in reader:
         print(row['user_id'], row['started_at'])
-#Соединение с бд
+        # РЎРѕРµРґРёРЅРµРЅРёРµ СЃ Р±Рґ
         config = {
-    'user': 'root',
-    'password': '',
-    'host': '127.0.0.1',
-    'database': 'bookmate2'
-                }
+            'user': 'root',
+            'password': '',
+            'host': '127.0.0.1',
+            'database': 'bookmate2'
+        }
         conn = mysql.connector.connect(**config)
         sql_statement = "INSERT INTO USERS(user_id , started_at) VALUES (%s,%s)"
         cur = conn.cursor()
-        cur.executemany(sql_statement,[(row['user_id'], row['started_at'])])
+        cur.executemany(sql_statement, [(row['user_id'], row['started_at'])])
         conn.commit()
-        
 
-# Не забываем закрыть соединение с базой данных
+# РќРµ Р·Р°Р±С‹РІР°РµРј Р·Р°РєСЂС‹С‚СЊ СЃРѕРµРґРёРЅРµРЅРёРµ СЃ Р±Р°Р·РѕР№ РґР°РЅРЅС‹С…
 conn.close()
