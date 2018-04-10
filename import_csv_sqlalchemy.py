@@ -1,15 +1,15 @@
-#Импортируем необходимые модули
+#РРјРїРѕСЂС‚РёСЂСѓРµРј РЅРµРѕР±С…РѕРґРёРјС‹Рµ РјРѕРґСѓР»Рё
 import pandas as pd
 import sqlalchemy
-#Читаем csv файл
+#Р§РёС‚Р°РµРј csv С„Р°Р№Р»
 frame = pd.read_csv('C:/Users/23/analyst_test.csv')
-#Создаем соединение с базой данных
+#РЎРѕР·РґР°РµРј СЃРѕРµРґРёРЅРµРЅРёРµ СЃ Р±Р°Р·РѕР№ РґР°РЅРЅС‹С…
 database_username = 'root'
 database_password = ''
 database_ip       = 'localhost'
 database_name     = 'bookmate'
 database_connection = sqlalchemy.create_engine('mysql+mysqlconnector://{0}:{1}@{2}/{3}'.
-                                               format(database_username, database_password, 
+                                               format(database_username, database_password,
                                                       database_ip, database_name))
-#Импортируем данные в бд. to_sql создаст таблицу, а также столбцы, если они отсутствуют в бд.
+#РРјРїРѕСЂС‚РёСЂСѓРµРј РґР°РЅРЅС‹Рµ РІ Р±Рґ. to_sql СЃРѕР·РґР°СЃС‚ С‚Р°Р±Р»РёС†Сѓ, Р° С‚Р°РєР¶Рµ СЃС‚РѕР»Р±С†С‹, РµСЃР»Рё РѕРЅРё РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ РІ Р±Рґ.
 frame.to_sql(con=database_connection, name='users', if_exists='replace')
